@@ -34,9 +34,13 @@ using (SqlConnection connection = new SqlConnection(connectionString))
                 //object age = reader["Age"];
                 //object name = reader["Name"];
 
-                object id = reader[column1];
-                object age = reader[column2];
-                object name = reader[column3];
+                //object id = reader[column1];
+                //object age = reader[column2];
+                //object name = reader[column3];
+
+                object id = reader.GetInt32(0);
+                object age = reader.GetInt32(1);
+                object name = reader.GetString(2);
 
                 Console.WriteLine($"{id}\t{name}\t{age}");
             }
