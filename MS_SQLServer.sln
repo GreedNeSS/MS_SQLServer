@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionPool", "Connectio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Command", "Command\Command.csproj", "{4CE67AB4-EC6E-42C1-9F07-4C1309B0E9B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryReader", "QueryReader\QueryReader.csproj", "{4A2CF63A-B92C-410C-AA40-EA1813F3707F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryReader", "QueryReader\QueryReader.csproj", "{4A2CF63A-B92C-410C-AA40-EA1813F3707F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GettingScalarValues", "GettingScalarValues\GettingScalarValues.csproj", "{DA706D7B-6401-4D47-8CB0-07AF25337FC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4A2CF63A-B92C-410C-AA40-EA1813F3707F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A2CF63A-B92C-410C-AA40-EA1813F3707F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A2CF63A-B92C-410C-AA40-EA1813F3707F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA706D7B-6401-4D47-8CB0-07AF25337FC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA706D7B-6401-4D47-8CB0-07AF25337FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA706D7B-6401-4D47-8CB0-07AF25337FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA706D7B-6401-4D47-8CB0-07AF25337FC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
