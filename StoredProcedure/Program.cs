@@ -24,14 +24,15 @@ AS
 SELECT * FROM Users
 GO";
 
-StoredProcedureClass procedureClass = new StoredProcedureClass();
-
-await procedureClass.CreateProcedureAsync(conStr, proc1);
-await procedureClass.CreateProcedureAsync(conStr, proc2);
+await StoredProcedureClass.CreateProcedureAsync(conStr, proc1);
+await StoredProcedureClass.CreateProcedureAsync(conStr, proc2);
 
 Console.WriteLine();
 
-await procedureClass.ExecutingProcedureAsync(conStr, "sp_InsertUser",
-    StoredProcedureClass.ExecuteType.ExecuteScalarAsync, parameters);
+object result1 = await StoredProcedureClass.ExecutingProcedureAsync(conStr, "sp_InsertUser",
+    ExecuteType.ExecuteScalarAsync, parameters);
+object result2 = await StoredProcedureClass.ExecutingProcedureAsync(conStr, "sp_GetUsers",
+    ExecuteType.ExecuteReaderAsync);
 
-await procedureClass.ExecutingProcedureAsync(conStr, "sp_GetUsers", StoredProcedureClass.ExecuteType.ExecuteReaderAsync);
+StoredProcedureClass.ShowQueryResult(result1);
+StoredProcedureClass.ShowQueryResult(result2);

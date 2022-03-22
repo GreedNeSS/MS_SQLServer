@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,16 +8,16 @@ using Microsoft.Data.SqlClient;
 
 namespace StoredProcedure
 {
-    internal class StoredProcedureClass
+    public enum ExecuteType
     {
-        public enum ExecuteType
-        {
-            ExecuteReaderAsync,
-            ExecuteNonQueryAsync,
-            ExecuteScalarAsync,
-        }
+        ExecuteReaderAsync,
+        ExecuteNonQueryAsync,
+        ExecuteScalarAsync,
+    }
 
-        public async Task CreateProcedureAsync(string connectionString, string sqlExpression)
+    internal static class StoredProcedureClass
+    {
+        public static async Task CreateProcedureAsync(string connectionString, string sqlExpression)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -35,65 +36,87 @@ namespace StoredProcedure
             }
         }
 
-        public async Task ExecutingProcedureAsync(string connectionString,
+        public static async Task<object> ExecutingProcedureAsync(string connectionString,
             string procedureName, ExecuteType executeType, Dictionary<string, string> parameters = null)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using SqlConnection connection = new SqlConnection(connectionString);
+
+            SqlCommand command = new SqlCommand(procedureName, connection);
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+
+            if (parameters is not null)
             {
-                SqlCommand command = new SqlCommand(procedureName, connection);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-
-                if (parameters is not null)
+                foreach (var (key, value) in parameters)
                 {
-                    foreach (var (key, value) in parameters)
+                    command.Parameters.AddWithValue(key, value);
+                }
+            }
+
+            try
+            {
+                await connection.OpenAsync();
+                switch (executeType)
+                {
+                    case ExecuteType.ExecuteReaderAsync:
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        adapter.Fill(ds);
+                        return ds;
+
+                    case ExecuteType.ExecuteNonQueryAsync:
+                        return await command.ExecuteNonQueryAsync();
+
+                    case ExecuteType.ExecuteScalarAsync:
+                        return await command.ExecuteScalarAsync();
+
+                    default:
+                        return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public static void ShowQueryResult(object result)
+        {
+            switch (result)
+            {
+                case DataSet dataSet:
+                    foreach (DataTable table in dataSet.Tables)
                     {
-                        command.Parameters.AddWithValue(key, value);
+                        foreach (DataColumn column in table.Columns)
+                            Console.Write($"{column.ColumnName}\t");
+                        Console.WriteLine();
+
+                        foreach (DataRow row in table.Rows)
+                        {
+                            var cells = row.ItemArray;
+
+                            foreach (var cell in cells)
+                                Console.Write($"{cell}\t");
+
+                            Console.WriteLine();
+                        }
                     }
-                }
+                    break;
 
-                try
-                {
-                    await connection.OpenAsync();
-                    switch (executeType)
-                    {
-                        case ExecuteType.ExecuteReaderAsync:
-                            using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                            {
-                                if (reader.HasRows)
-                                {
-                                    int count = reader.FieldCount;
+                case decimal:
+                    Console.WriteLine($"Результат: {result}");
+                    break;
 
-                                    for (int i = 0; i < count; i++)
-                                        Console.Write(reader.GetName(i) + "\t");
+                case int:
+                    Console.WriteLine($"Добавлено обьектов: {result}");
+                    break;
 
-                                    Console.WriteLine();
+                case null:
+                    Console.WriteLine("Нет результата.");
+                    break;
 
-                                    while (await reader.ReadAsync())
-                                    {
-                                        for (int i = 0; i < count; i++)
-                                            Console.Write(reader.GetValue(i) + "\t");
-
-                                        Console.WriteLine();
-                                    }
-                                }
-                            }
-                            break;
-
-                        case ExecuteType.ExecuteNonQueryAsync:
-                            await command.ExecuteNonQueryAsync();
-                            Console.WriteLine("Запрос выполнен!");
-                            break;
-
-                        case ExecuteType.ExecuteScalarAsync:
-                            object num = await command.ExecuteScalarAsync();
-                            Console.WriteLine($"Result: {num}");
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                default:
+                    break;
             }
         }
     }
