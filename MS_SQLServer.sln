@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutputParametersOfStoredPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions", "Transactions\Transactions.csproj", "{61C64F1D-7B6A-4779-A093-0C6871A465B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadUploadFiles", "LoadUploadFiles\LoadUploadFiles.csproj", "{A1EBB037-F4CE-4E56-88A0-EB12E567CDBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{61C64F1D-7B6A-4779-A093-0C6871A465B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61C64F1D-7B6A-4779-A093-0C6871A465B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61C64F1D-7B6A-4779-A093-0C6871A465B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1EBB037-F4CE-4E56-88A0-EB12E567CDBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1EBB037-F4CE-4E56-88A0-EB12E567CDBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1EBB037-F4CE-4E56-88A0-EB12E567CDBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1EBB037-F4CE-4E56-88A0-EB12E567CDBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
