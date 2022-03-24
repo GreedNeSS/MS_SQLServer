@@ -87,7 +87,7 @@ namespace AdoNetDbDAL.DataOperations
         {
             OpenConnection();
             Person person = null;
-            string sql = $"Select * From Users Where @Name";
+            string sql = $"Select * From Users Where Name = @Name";
 
             using (SqlCommand command = new SqlCommand(sql, _sqlConnection))
             {
@@ -150,7 +150,6 @@ namespace AdoNetDbDAL.DataOperations
                     ParameterName = "@Name",
                     Value = person.Name,
                     SqlDbType = SqlDbType.Char,
-                    Size = 10
                 };
                 command.Parameters.Add(parameter);
 
