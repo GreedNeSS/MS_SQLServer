@@ -37,3 +37,16 @@ foreach (var item in list)
 {
     Console.WriteLine($"{item}");
 }
+
+Console.WriteLine("\n=> SimpleTransactionExample(true, 10): ");
+
+dal.SimpleTransactionExample(true, 10);
+
+Console.WriteLine("\n*** People ***");
+
+list = dal.GetAllPeople();
+
+foreach (var item in list)
+{
+    Console.WriteLine($"{item}");
+}

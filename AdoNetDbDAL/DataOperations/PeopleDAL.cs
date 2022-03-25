@@ -212,5 +212,72 @@ namespace AdoNetDbDAL.DataOperations
 
             CloseConnection();
         }
+
+        public void SimpleTransactionExample(bool throwEx, int personId)
+        {
+            OpenConnection();
+            string name;
+            int age;
+            SqlCommand command = new SqlCommand($"Select * From Users Where Id = @id",
+                _sqlConnection);
+            command.Parameters.AddWithValue("@id", personId);
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    name = reader.GetString(2);
+                    age = reader.GetInt32(1);
+
+                    Console.WriteLine($"Name: {name}, Age: {age}");
+                }
+                else
+                {
+                    Console.WriteLine("Пользователь не найден!");
+
+                    CloseConnection();
+                    return;
+                }
+            }
+
+            SqlCommand cmdRemove = new SqlCommand($"Delete From Users Where Id = @id",
+                _sqlConnection);
+            cmdRemove.Parameters.AddWithValue("@id", personId);
+
+            SqlCommand cmdInsert = new SqlCommand($"Insert Into Users " +
+                $"(Name, Age) Values(@name, @age)", _sqlConnection);
+            cmdInsert.Parameters.AddWithValue("@name", name);
+            cmdInsert.Parameters.AddWithValue("@age", age);
+
+            SqlTransaction transaction = null;
+            try
+            {
+                transaction = _sqlConnection.BeginTransaction();
+
+                cmdInsert.Transaction = transaction;
+                cmdRemove.Transaction = transaction;
+
+                cmdInsert.ExecuteNonQuery();
+                cmdRemove.ExecuteNonQuery();
+
+                if (throwEx)
+                {
+                    throw new Exception("DB Error! transaction rollback!");
+                }
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                transaction?.Rollback();
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
     }
 }
