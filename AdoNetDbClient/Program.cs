@@ -1,5 +1,6 @@
 ﻿using AdoNetDbDAL.DataOperations;
 using AdoNetDbDAL.Models;
+using AdoNetDbDAL.BulkImport;
 
 Console.WriteLine("***** AdoNetDb Client *****");
 
@@ -41,6 +42,28 @@ foreach (var item in list)
 Console.WriteLine("\n=> SimpleTransactionExample(true, 10): ");
 
 dal.SimpleTransactionExample(true, 10);
+
+Console.WriteLine("\n*** People ***");
+
+list = dal.GetAllPeople();
+
+foreach (var item in list)
+{
+    Console.WriteLine($"{item}");
+}
+
+Console.WriteLine("\n***** Do Bulk Copy *****");
+
+List<Person> people = new List<Person>
+{
+    new Person{Name = "Rick", Age = 37},
+    new Person{Name = "Bill", Age = 40},
+    new Person{Name = "Rufus", Age = 12},
+    new Person{Name = "Fill", Age = 23},
+    new Person{Name = "Fred", Age = 56},
+};
+
+ProcessBulkImport.ExecuteBulkImport(people, "Users");
 
 Console.WriteLine("\n*** People ***");
 
